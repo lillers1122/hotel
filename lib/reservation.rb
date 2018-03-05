@@ -8,7 +8,6 @@ require 'date'
 
 module Hotel
   COST = 200
-
   class Reservation
     attr_reader :reservation_id, :room_id, :start_date, :end_date
 
