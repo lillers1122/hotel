@@ -11,11 +11,18 @@ module Hotel
     attr_reader :rooms, :reservations
 
     def initialize
-      @rooms = []
+      @rooms = create_rooms
       @reservations = []
     end
 
-    def create_room
+    def create_rooms
+      rooms = []
+      20.times do |num|
+        room = Room.new(room_id: num + 1)
+        rooms << room
+      end
+
+      return rooms
     end
 
     def find_room

@@ -19,7 +19,11 @@ describe "FrontDesk class" do
   end
 
   describe "create_room method" do
-
+    it "creates 20 rooms" do
+      concierge = Hotel::FrontDesk.new
+      concierge.create_rooms
+      concierge.rooms.length.must_equal 20
+    end
   end
 
   describe "find_room method" do
