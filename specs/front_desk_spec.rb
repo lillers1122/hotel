@@ -58,8 +58,8 @@ describe "FrontDesk class" do
       @concierge.reservations.length.must_equal 1
       @concierge.reservations.first.reservation_id.must_equal 1
       @concierge.reservations.first.room_id.must_be_kind_of Integer
-      @concierge.reservations.first.start_date.must_equal Date.new('2018-5-5')
-      @concierge.reservations.first.end_date.must_equal Date.new('2018-5-7')
+      @concierge.reservations.first.start_date.must_equal Date.parse('2018-5-5')
+      @concierge.reservations.first.end_date.must_equal Date.parse('2018-5-7')
     end
   end
 
