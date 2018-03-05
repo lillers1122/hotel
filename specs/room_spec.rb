@@ -30,7 +30,10 @@ describe "Room class" do
   end
 
   describe "unavailable method" do
-    it "changes driver's status to UNAVAILABLE" do
+    it "changes a Room's status to UNAVAILABLE" do
+      my_room = Hotel::Room.new(room_id: 1, reservations: [], status: :AVAILABLE)
+      my_room.unavailable
+      my_room.status.must_equal :UNAVAILABLE
     end
   end
 
