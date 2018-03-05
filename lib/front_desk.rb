@@ -21,7 +21,6 @@ module Hotel
         room = Room.new(room_id: num + 1)
         rooms << room
       end
-
       return rooms
     end
 

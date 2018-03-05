@@ -19,10 +19,17 @@ describe "FrontDesk class" do
   end
 
   describe "create_room method" do
+    before do
+      @concierge = Hotel::FrontDesk.new
+      @concierge.create_rooms
+    end
     it "creates 20 rooms" do
-      concierge = Hotel::FrontDesk.new
-      concierge.create_rooms
-      concierge.rooms.length.must_equal 20
+      @concierge.rooms.length.must_equal 20
+    end
+
+    it "creates rooms with ids from 1 - 20" do
+      @concierge.rooms.first.room_id.must_equal 1
+      @concierge.rooms.last.room_id.must_equal 20
     end
   end
 
