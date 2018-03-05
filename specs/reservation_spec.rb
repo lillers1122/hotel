@@ -7,8 +7,6 @@ describe "Reservation class" do
       my_trip = {reservation_id: 1, room_id: 1, start_date:  Date.new(2018,5,5), end_date: Date.new(2018,5,7)}
 
       @reservation = Hotel::Reservation.new(my_trip)
-
-
     end
 
     it "is an instance of Reservation" do
