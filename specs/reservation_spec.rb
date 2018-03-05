@@ -57,7 +57,7 @@ describe "Reservation class" do
 
       my_trip = Hotel::Reservation.new(data)
       my_trip.projected_cost.must_be_instance_of Float
-      my_trip.projected_cost.must_equal 200
+      my_trip.projected_cost.must_equal 400.00
     end
   end
 

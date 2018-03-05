@@ -1,6 +1,8 @@
 require 'awesome_print'
 
 module Hotel
+  COST = 200
+
   class Reservation
     attr_reader :reservation_id, :room_id, :start_date, :end_date
 
@@ -16,10 +18,11 @@ module Hotel
     end
 
     def duration
-
+      (@end_date - @start_date).to_i
     end
 
     def projected_cost
+      cost = (duration * COST).to_f.round(2)
     end
 
 
