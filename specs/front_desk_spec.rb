@@ -18,11 +18,21 @@ describe "FrontDesk class" do
     end
   end
 
-  describe "find_room" do
+  describe "create_room method" do
+
+  end
+
+  describe "find_room method" do
     it "throws an argument error for a bad room_id" do
+
     end
 
     it "finds a room instance" do
+    end
+  end
+
+  describe "reserve_room method" do
+    it "accurately makes a room reservation for specific dates" do
     end
   end
 
@@ -34,10 +44,7 @@ describe "FrontDesk class" do
     end
   end
 
-  describe "create_reservation" do
-    it "accurately makes a room reservation for specific dates" do
-    end
-  end
+
 
 
 end
