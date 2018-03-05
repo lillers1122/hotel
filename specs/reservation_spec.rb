@@ -22,13 +22,13 @@ describe "Reservation class" do
 
       @reservation.reservation_id.must_be_kind_of Integer
       @reservation.room_id.must_be_kind_of Integer
-      @reservation.start_date.must_be_kind_of Time
-      @reservation.end_date.must_be_kind_of Time
+      @reservation.start_date.must_be_kind_of Date
+      @reservation.end_date.must_be_kind_of Date
     end
 
     it "raises an error for invalid Dates" do
-      @reservation.start_date.must_be_instance_of Time
-      @reservation.end_date.must_be_instance_of Time
+      @reservation.start_date.must_be_instance_of Date
+      @reservation.end_date.must_be_instance_of Date
       invalid_data = {
         reservation_id: 8,
         room_id: 5,
