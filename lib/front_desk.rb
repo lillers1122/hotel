@@ -24,10 +24,16 @@ module Hotel
       return rooms
     end
 
-    def find_room
+    def all_rooms
+      room_ids = []
+      @rooms.each do |room|
+        room_ids << room.room_id
+      end
+      return room_ids
     end
 
     def reserve_room
+
     end
 
     def find_reservation

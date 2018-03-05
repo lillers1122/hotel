@@ -33,8 +33,13 @@ describe "FrontDesk class" do
     end
   end
 
-  describe "find_room method" do
-    it "throws an argument error for a bad room_id" do
+  describe "all_rooms method" do
+    it "prints a list of every room_id in the hotel" do
+      concierge = Hotel::FrontDesk.new
+      concierge.all_rooms.must_be_kind_of Array
+      concierge.all_rooms.length.must_equal 20
+      concierge.all_rooms.first.must_equal 1
+      concierge.all_rooms.last.must_equal 20
 
     end
 

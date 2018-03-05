@@ -6,16 +6,11 @@ require 'date'
 
 module Hotel
   class Room
-    attr_reader :room_id, :reservations, :status
+    attr_reader :room_id, :reservations
 
     def initialize(input)
       @room_id = input[:room_id]
       @reservations = []
-      @status = :AVAILABLE
-    end
-
-    def unavailable
-      @status = :UNAVAILABLE
     end
 
   end
