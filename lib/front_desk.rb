@@ -32,7 +32,17 @@ module Hotel
       return room_ids
     end
 
-    def reserve_room
+    def reserve_room(visit_start, visit_end)
+        data = {
+        reservation_id: @reservations.length + 1,
+        room_id: @rooms.sample.room_id,
+        start_date: Date.new(visit_start),
+        end_date: Date.new(visit_end)
+        }
+        
+      new_reservation = Hotel::Reservation.new(data)
+
+      @reservations << new_reservation
 
     end
 

@@ -4,7 +4,7 @@ describe "Reservation class" do
 
   describe "Reservation instantiation" do
     before do
-      my_trip = {reservation_id: 1, room_id: 1, start_date:  Date.new(2018,5,5), end_date: Date.new(2018,5,7)}
+      my_trip = {reservation_id: 1, room_id: 1, start_date: '2018-5-5', end_date: '2018-5-7'}
 
       @reservation = Hotel::Reservation.new(my_trip)
     end
@@ -30,8 +30,8 @@ describe "Reservation class" do
       invalid_data = {
         reservation_id: 8,
         room_id: 5,
-        start_date: Date.new(2018,5,7),
-        end_date: Date.new(2018,5,5),
+        start_date: '2018-5-7',
+        end_date: '2018-5-5',
       }
       proc {
         Hotel::Reservation.new(invalid_data)
@@ -41,7 +41,7 @@ describe "Reservation class" do
 
   describe "duration method" do
     it "calculates trip length in nights" do
-      data = {reservation_id: 1, room_id: 1, start_date:  Date.new(2018,5,5), end_date: Date.new(2018,5,7)}
+      data = {reservation_id: 1, room_id: 1, start_date: '2018-5-5', end_date: '2018-5-7'}
 
       my_trip = Hotel::Reservation.new(data)
       my_trip.duration.must_be_instance_of Integer
@@ -51,7 +51,7 @@ describe "Reservation class" do
 
   describe "projected_cost method" do
     it "calculates trip length in nights" do
-      data = {reservation_id: 1, room_id: 1, start_date:  Date.new(2018,5,5), end_date: Date.new(2018,5,7)}
+      data = {reservation_id: 1, room_id: 1, start_date: '2018-5-5', end_date: '2018-5-7'}
 
       my_trip = Hotel::Reservation.new(data)
       my_trip.projected_cost.must_be_instance_of Float

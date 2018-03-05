@@ -14,8 +14,8 @@ module Hotel
     def initialize(input)
       @reservation_id = input[:reservation_id]
       @room_id = input[:room_id]
-      @start_date = input[:start_date]
-      @end_date = input[:end_date]
+      @start_date = Date.parse(input[:start_date])
+      @end_date = Date.parse(input[:end_date])
 
       if @end_date != nil && @start_date - @end_date > 0
         raise ArgumentError.new("ENDING BEFORE STARTING IS NOT ALLOWED")

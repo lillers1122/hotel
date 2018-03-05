@@ -48,7 +48,18 @@ describe "FrontDesk class" do
   end
 
   describe "reserve_room method" do
+    before do
+      @concierge = Hotel::FrontDesk.new
+      @concierge.reservations.length.must_equal 0
+    end
+
     it "accurately makes a room reservation for specific dates" do
+      @concierge.reserve_room('2018-5-5','2018-5-7')
+      @concierge.reservations.length.must_equal 1
+      @concierge.reservations.first.reservation_id.must_equal 1
+      @concierge.reservations.first.room_id.must_be_kind_of Integer
+      @concierge.reservations.first.start_date.must_equal Date.new('2018-5-5')
+      @concierge.reservations.first.end_date.must_equal Date.new('2018-5-7')
     end
   end
 
