@@ -1,4 +1,5 @@
 require 'date'
+require 'pry'
 require_relative 'room'
 require_relative 'reservation'
 #As an administrator, I can access the list of all of the rooms in the hotel
@@ -32,14 +33,43 @@ module Hotel
       return room_ids
     end
 
+    def find_room(room_id)
+      @rooms.find{ |room| room.room_id == room_id }
+    end
+
+    def rooms_availabile(r_start, r_end)
+      rooms = all_rooms
+
+      unavailable_rooms = []
+
+      @reservations.each do |reservation|
+        if reservation.overlap?(r_start, r_end) == false
+          a = reservation.room_id
+          unavailable_rooms << a
+        end
+      end
+
+      available_rooms = rooms - unavailable_rooms
+
+      if available_rooms.length == 0
+        raise ArgumentError.new("No rooms available!")
+      else
+        return available_rooms
+      end
+    end
+
     def reserve_room(r_start, r_end)
-        data = {
+      available_rooms = rooms_availabile(r_start, r_end)
+      new_room = available_rooms.first
+
+      new_reservation = Hotel::Reservation.new({
         reservation_id: @reservations.length + 1,
-        room_id: @rooms.sample.room_id, #need to check for trip date conflicts later
+        room_id: new_room,
         start_date: r_start,
         end_date: r_end
-        }
-      new_reservation = Hotel::Reservation.new(data)
+        })
+
+      #find_room(new_reservation.room_id).add_reservation(new_reservation)
       @reservations << new_reservation
       return new_reservation
     end
@@ -50,10 +80,9 @@ module Hotel
 
       @reservations.each do |reservation|
         if a.between?(reservation.start_date, reservation.end_date)
-          valid << reservation
+            valid << reservation
         end
       end
-
       valid.length == 0?  nil : valid
     end
 
@@ -65,10 +94,8 @@ module Hotel
       end
     end
 
-    def available_rooms(r_start, r_end)
+    def room_block(r_start, r_end)
     end
-
-
 
   end
 end

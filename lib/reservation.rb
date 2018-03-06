@@ -30,5 +30,27 @@ module Hotel
       cost = (duration * COST).to_f.round(2)
     end
 
+    def overlap?(r_start, r_end)
+      a = Date.parse(r_start)
+      b = Date.parse(r_end)
+      num = (b - a).to_i
+      range = []
+
+      count = 0
+      num.times do
+        range << a + count
+        count += 1
+      end
+
+      if a > self.start_date && b < self.end_date
+        return false
+      elsif range.include?(self.start_date)
+        return false
+      elsif range.include?(self.end_date - 1)
+        return false
+      else true
+      end
+      
+    end
   end
 end
