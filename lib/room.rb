@@ -7,16 +7,18 @@ require 'date'
 module Hotel
   class Room
     attr_reader :room_id
-    attr_accessor :reservations
+    attr_accessor :blocks
 
     def initialize(input)
       @room_id = input[:room_id]
-      @reservations = []
+      @blocks = []
+      # @reservations = []
     end
 
-    def add_reservation(new_reservation)
-      @reservations << new_reservation
-    end
+    # def add_reservation(new_reservation)
+    #   @reservations << new_reservation
+    # end
+
 
     # def available?(s_date, e_date)
     #   available_rooms = []

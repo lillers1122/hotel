@@ -94,7 +94,11 @@ module Hotel
       end
     end
 
-    def room_block(r_start, r_end)
+    def room_block(r_start, r_end, number)
+      rooms = rooms_availabile(r_start, r_end)
+      #(0..number)
+
+      #make a block by ostensibly creating a reservation
     end
 
   end
