@@ -63,11 +63,19 @@ describe "FrontDesk class" do
     end
   end
 
-  describe "find_reservation method" do
-    it "throws an argument error for a bad reservation_id" do
+  describe "find_reservations_by_date method" do
+    before do
+      @concierge = Hotel::FrontDesk.new
+      @concierge.reserve_room('2018-5-5','2018-5-7')
+      @concierge.reserve_room('2018-5-5','2018-5-10')
     end
 
-    it "finds a reservation instance" do
+    it "returns nil if there are no reservations during the requested timeframe" do
+      @concierge.find_reservations_by_date('2018-6-5','2018-6-7').must_be_nil
+    end
+
+    it "returns reservations during the requested timeframe" do
+      @concierge.find_reservations_by_date('2018-5-5','2018-5-10').length.must_equal 2
     end
   end
 
