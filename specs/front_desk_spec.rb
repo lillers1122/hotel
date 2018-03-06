@@ -40,7 +40,6 @@ describe "FrontDesk class" do
       concierge.all_rooms.length.must_equal 20
       concierge.all_rooms.first.must_equal 1
       concierge.all_rooms.last.must_equal 20
-
     end
 
     it "finds a room instance" do
@@ -84,10 +83,6 @@ describe "FrontDesk class" do
       @concierge = Hotel::FrontDesk.new
     end
 
-    it "raises an ArgumentError for an invalid reservation" do
-      @concierge.find_cost(1).must_raise ArgumentError
-    end
-
     it "returns the cost of the first reservation" do
       @concierge.reserve_room('2018-5-5','2018-5-7')
       @concierge.find_cost(1).must_equal 400.00
@@ -99,6 +94,25 @@ describe "FrontDesk class" do
       @concierge.reserve_room('2018-5-5','2018-5-7')
 
       @concierge.find_cost(2).must_equal 1000.00
+    end
+  end
+
+  describe "available_rooms" do
+    before do
+      @concierge = Hotel::FrontDesk.new
+      18.times do
+        @concierge.reserve_room('2018-5-5','2018-5-7')
+      end
+    end
+
+    it "return an array of rooms for a given date range" do
+      @concierge.available_rooms('2018-5-5','2018-5-7').length.must_equal 2
+    end
+
+    it "must raise an error if no rooms are available" do
+      @concierge.reserve_room('2018-5-5','2018-5-7')
+      @concierge.reserve_room('2018-5-5','2018-5-7')
+      @concierge.available_rooms('2018-5-5','2018-5-7').must_raise ArgumentError
     end
   end
 

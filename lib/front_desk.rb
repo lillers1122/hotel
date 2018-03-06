@@ -54,14 +54,18 @@ module Hotel
         end
       end
 
-      if valid.length == 0
-        return nil
-      else
-      return valid
-      end
+      valid.length == 0?  nil : valid
     end
 
     def find_cost(id)
+      @reservations.each do |reservation|
+        if reservation.reservation_id == id
+          return reservation.projected_cost
+        end
+      end
+    end
+
+    def available_rooms(r_start, r_end)
     end
 
 

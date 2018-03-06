@@ -30,9 +30,5 @@ module Hotel
       cost = (duration * COST).to_f.round(2)
     end
 
-
-
-
-
   end
 end
