@@ -71,11 +71,11 @@ describe "FrontDesk class" do
     end
 
     it "returns nil if there are no reservations during the requested timeframe" do
-      @concierge.find_reservations_by_date('2018-6-5','2018-6-7').must_be_nil
+      @concierge.find_reservations_by_date('2018-6-5').must_be_nil
     end
 
     it "returns reservations during the requested timeframe" do
-      @concierge.find_reservations_by_date('2018-5-5','2018-5-10').length.must_equal 2
+      @concierge.find_reservations_by_date('2018-5-6').length.must_equal 2
     end
   end
 

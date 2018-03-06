@@ -10,7 +10,7 @@ module Hotel
 
     def initialize(input)
       @room_id = input[:room_id]
-      @reservations = []
+      @reservations = [] #can maybe be removed? or reserve room method for FrontDesk will need to populate this field too
     end
 
   end

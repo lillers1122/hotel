@@ -35,18 +35,30 @@ module Hotel
     def reserve_room(r_start, r_end)
         data = {
         reservation_id: @reservations.length + 1,
-        room_id: @rooms.sample.room_id,
+        room_id: @rooms.sample.room_id, #need to check for trip date conflicts later
         start_date: r_start,
         end_date: r_end
         }
-
       new_reservation = Hotel::Reservation.new(data)
-
       @reservations << new_reservation
       return new_reservation
     end
 
-    def find_reservation
+    def find_reservations_by_date(date)
+      valid = []
+      a = Date.parse(date)
+
+      @reservations.each do |reservation|
+        if a.between?(reservation.start_date, reservation.end_date)
+          valid << reservation
+        end
+      end
+
+      if valid.length == 0
+        return nil
+      else
+      return valid
+      end
     end
 
 
