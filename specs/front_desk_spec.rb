@@ -79,7 +79,28 @@ describe "FrontDesk class" do
     end
   end
 
+  describe "find_cost method" do
+    before do
+      @concierge = Hotel::FrontDesk.new
+    end
 
+    it "raises an ArgumentError for an invalid reservation" do
+      @concierge.find_cost(1).must_raise ArgumentError
+    end
+
+    it "returns the cost of the first reservation" do
+      @concierge.reserve_room('2018-5-5','2018-5-7')
+      @concierge.find_cost(1).must_equal 400.00
+    end
+
+    it "returns the cost of a given reservation id" do
+      @concierge.reserve_room('2018-5-5','2018-5-7')
+      @concierge.reserve_room('2018-5-5','2018-5-10')
+      @concierge.reserve_room('2018-5-5','2018-5-7')
+
+      @concierge.find_cost(2).must_equal 1000.00
+    end
+  end
 
 
 end

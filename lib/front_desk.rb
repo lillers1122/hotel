@@ -61,6 +61,8 @@ module Hotel
       end
     end
 
+    def find_cost(id)
+    end
 
 
 
