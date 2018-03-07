@@ -11,28 +11,12 @@ describe "Room class" do
     end
 
     it "is set up for specific attributes and data types" do
-      [:room_id, :blocks, :block_status].each do |prop|
-        @room.must_respond_to prop
-      end
-
+      @room.must_respond_to :room_id
       @room.room_id.must_be_kind_of Integer
-      @room.blocks.must_be_kind_of Array
-      @room.block_status.must_be_kind_of Symbol
     end
 
     it "correctly initializes default data" do
       @room.room_id.must_equal 1
-      @room.blocks.length.must_equal 0
-      @room.block_status.must_equal :AVAILABLE
-    end
-  end
-
-  describe "unavailable method" do
-    it "changes block_status to :UNAVAILABLE" do
-      @room = Hotel::Room.new(room_id: 1)
-      @room.block_status.must_equal :AVAILABLE
-      @room.unavailable
-      @room.block_status.must_equal :UNAVAILABLE
     end
   end
 
