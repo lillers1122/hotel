@@ -157,20 +157,30 @@ describe "FrontDesk class" do
     before do
       @concierge = Hotel::FrontDesk.new
       @concierge.blocks.length.must_equal 0
+      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
     end
 
     it "accurately updates @reservations" do
-      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
       @concierge.reservations.length.must_equal 3
     end
 
     it "accurately reserves rooms" do
+      @concierge.reservations.first.block_id.must_equal 1
     end
     # it "accurately calculates total for a room block room" do
     #   @concierge.room_block(4, '2018-5-5', '2018-5-7')
     #   @concierge.find_blocked_room(1,1).start_date.must_equal Date.parse('2018-5-5')
     #
     # end
+  end
+
+  describe "find_reservations_in_block() method" do
+    it "finds reservations in a given block" do
+      @concierge = Hotel::FrontDesk.new
+      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
+      @concierge.find_reservations_in_block(1).length.must_equal 3
+      @concierge.find_reservations_in_block(1).first.must_be_kind_of Hotel::Reservation
+    end
   end
 
   describe "find_blocked_rooms() method" do
@@ -193,7 +203,13 @@ describe "FrontDesk class" do
     end
   end
 
-  describe "find_blocked_room method" do
+  describe "find_blocked_room() method" do
+    it "returns requested room" do
+      @concierge = Hotel::FrontDesk.new
+      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
+      a = @concierge.reservations.first
+      @concierge.find_blocked_room(1,1).must_equal a
+    end
 
   end
 
