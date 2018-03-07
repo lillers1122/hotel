@@ -12,25 +12,5 @@ module Hotel
       @room_id = input[:room_id]
     end
 
-    # def add_reservation(new_reservation)
-    #   @reservations << new_reservation
-    # end
-
-    # def available?(s_date, e_date)
-    #   available_rooms = []
-    #
-    #   @rooms.each do |room|
-    #     room.reservations.each do |reservation|
-    #       binding.pry
-    #       if reservation.overlap?(s_date, e_date) == false
-    #         binding.pry
-    #         available_rooms << reservation[:room_id]
-    #
-    #       end
-    #     end
-    #   end
-    #   return available_rooms
-    # end
-
   end
 end

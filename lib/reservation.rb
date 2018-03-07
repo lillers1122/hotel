@@ -7,7 +7,6 @@ require 'date'
 #As an administrator, I can get the total cost for a given reservation
 
 module Hotel
-  # COST = 200
   class Reservation
     attr_reader :reservation_id, :room_id, :start_date, :end_date
     attr_accessor :block_id, :block_status, :cost

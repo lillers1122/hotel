@@ -106,6 +106,7 @@ describe "FrontDesk class" do
     it "returns reservations during the requested timeframe" do
       @concierge.find_reservations_by_date('2018-5-6').length.must_equal 2
     end
+
   end
 
   describe "find_cost method" do
@@ -245,12 +246,6 @@ describe "FrontDesk class" do
     end
   end
 end
-
-# it "accurately calculates total for a room block room" do
-#   @concierge.room_block(4, '2018-5-5', '2018-5-7')
-#   @concierge.find_blocked_room(1,1).start_date.must_equal Date.parse('2018-5-5')
-#
-# end
 
 
 
