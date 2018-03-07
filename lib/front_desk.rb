@@ -149,15 +149,19 @@ module Hotel
       return rooms_in_block
     end
 
-    def find_blocked_room(r_room_id, r_block_id)
-      rooms = find_blocked_rooms(r_block_id)
+    # def find_blocked_room(r_room_id, r_block_id)
+    #   reservations = find_reservations_in_block(r_block_id)
+    #
+    #   reservations.find { |reservation| reservation.room_id == r_room_id && room.block_id == r_block_id }
+    #
+    # end
 
-      rooms.find { |room| room.room_id == r_room_id && room.block_id == r_block_id }
+    def available_rooms_in_block(r_block_id)
 
     end
 
-    def book_blocked_room(block_id)
-      blocked_rooms(block_id)
+    def book_blocked_room(r_block_id)
+      blocked_rooms(r_block_id)
     end
 
 

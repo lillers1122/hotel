@@ -203,19 +203,20 @@ describe "FrontDesk class" do
     end
   end
 
-  describe "find_blocked_room() method" do
-    it "returns requested room" do
-      @concierge = Hotel::FrontDesk.new
-      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
-      a = @concierge.reservations.first
-      @concierge.find_blocked_room(1,1).must_equal a
-    end
+  # describe "find_blocked_room() method" do
+  #   it "returns requested room" do
+  #     @concierge = Hotel::FrontDesk.new
+  #     @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
+  #     a = @concierge.reservations.first
+  #     @concierge.find_blocked_room(1,1).must_equal a
+  #   end
+  # end
 
+  describe "available_rooms_in_block" do
   end
 
   describe "book_blocked_room method" do
   end
-
 end
 
 
