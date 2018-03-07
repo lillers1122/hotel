@@ -101,13 +101,13 @@ module Hotel
       end
     end
 
-    def room_block(number, r_start, r_end)
+    def make_room_block(number, r_start, r_end)
       if number > 5
         raise ArgumentError.new("Cannot block more than 5 rooms!")
       end
 
       rooms = (rooms_available(r_start, r_end)).take(number)
-      puts rooms
+      # puts rooms
 
       new_block = Hotel::Block.new({
         block_id: @blocks.length + 1,
@@ -121,7 +121,7 @@ module Hotel
       return new_block
     end
 
-    def room_block_reservations(block)
+    def room_block_reservations(block) #helper
       block.block_rooms.each do |room|
         new_reservation = Hotel::Reservation.new({
           block_id: block.block_id,
@@ -133,6 +133,27 @@ module Hotel
         @reservations << new_reservation
       end
     end
+
+    def find_blocked_rooms(r_block_id)
+      block_reservations = @reservations.select { |reservation| reservation.block_id != nil && reservation.block_id == r_block_id}
+
+      rooms_in_block = []
+
+      block_reservations.each do |block_res|
+        rooms_in_block << block_res.room_id
+      end
+
+      return rooms_in_block
+    end
+
+    # def find_blocked_room(room_id, block_id)
+    #   @rooms.find{ |room| room.room_id == room_id && room.block_id == block_id }
+    # end
+    #
+    # def book_blocked_room(block_id)
+    #   blocked_rooms(block_id)
+    # end
+
 
   end
 

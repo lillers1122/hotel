@@ -127,31 +127,93 @@ describe "FrontDesk class" do
     end
   end
 
-  describe "room_block method" do
+  describe "make_room_block method" do
     before do
       @concierge = Hotel::FrontDesk.new
       @concierge.blocks.length.must_equal 0
     end
 
     it "accurately makes a room block for specific dates" do
-      @concierge.room_block(3, '2018-5-5', '2018-5-7')
+      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
       @concierge.blocks.length.must_equal 1
       @concierge.blocks.first.block_id.must_equal 1
       @concierge.blocks.first.start_date.must_equal Date.parse('2018-5-5')
       @concierge.blocks.first.end_date.must_equal Date.parse('2018-5-7')
     end
 
-    it "accurately updates @reservations and @blocks" do
-      @concierge.room_block(3, '2018-5-5', '2018-5-7')
+    it "accurately updates @blocks" do
+      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
       @concierge.blocks.length.must_equal 1
-      @concierge.reservations.length.must_equal 3
     end
 
     it "raises an ArgumentError if request is for too many rooms" do
       proc {
-        @concierge.room_block(6, '2018-5-5', '2018-5-7')
+        @concierge.make_room_block(6, '2018-5-5', '2018-5-7')
       }.must_raise ArgumentError
     end
   end
 
+  describe "room_block_reservations helper method" do
+    before do
+      @concierge = Hotel::FrontDesk.new
+      @concierge.blocks.length.must_equal 0
+    end
+
+    it "accurately updates @reservations" do
+      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
+      @concierge.reservations.length.must_equal 3
+    end
+
+    it "accurately reserves rooms" do
+    end
+    # it "accurately calculates total for a room block room" do
+    #   @concierge.room_block(4, '2018-5-5', '2018-5-7')
+    #   @concierge.find_blocked_room(1,1).start_date.must_equal Date.parse('2018-5-5')
+    #
+    # end
+  end
+
+  describe "find_blocked_rooms() method" do
+    before do
+      @concierge = Hotel::FrontDesk.new
+      @concierge.reserve_room('2018-5-5','2018-5-7')
+    end
+
+    it "finds rooms assigned to a particular block" do
+      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
+      @concierge.find_blocked_rooms(1).length.must_equal 3
+      a = [2,3,4]
+      @concierge.find_blocked_rooms(1).must_equal a
+    end
+
+    it "finds rooms assigned to a particular block" do
+      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
+      @concierge.make_room_block(4, '2018-5-7', '2018-5-14')
+      @concierge.find_blocked_rooms(2).length.must_equal 4
+    end
+  end
+
+  describe "find_blocked_room method" do
+
+  end
+
+  describe "book_blocked_room method" do
+  end
+
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#
