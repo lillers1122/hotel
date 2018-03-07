@@ -101,7 +101,7 @@ module Hotel
       end
     end
 
-    def make_room_block(number, r_start, r_end)
+    def make_room_block(number, cost, r_start, r_end)
       if number > 5
         raise ArgumentError.new("Cannot block more than 5 rooms!")
       end
@@ -113,7 +113,8 @@ module Hotel
         block_id: @blocks.length + 1,
         block_rooms: rooms,
         start_date: r_start,
-        end_date: r_end
+        end_date: r_end,
+        cost: cost
         })
 
       @blocks << new_block
@@ -129,7 +130,8 @@ module Hotel
           room_id: room,
           start_date: block.start_date.to_s,
           end_date: block.end_date.to_s,
-          block_status: :AVAILABLE
+          block_status: :AVAILABLE,
+          cost: block.cost
           })
         @reservations << new_reservation
       end

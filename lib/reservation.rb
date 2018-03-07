@@ -7,16 +7,17 @@ require 'date'
 #As an administrator, I can get the total cost for a given reservation
 
 module Hotel
-  COST = 200
+  # COST = 200
   class Reservation
     attr_reader :reservation_id, :room_id, :start_date, :end_date
-    attr_accessor :block_id, :block_status
+    attr_accessor :block_id, :block_status, :cost
 
     def initialize(input)
       @reservation_id = input[:reservation_id]
       @room_id = input[:room_id]
       @start_date = Hotel.convert_string_date(input[:start_date])
       @end_date = Hotel.convert_string_date(input[:end_date])
+      @cost = input[:cost] == nil ? 200 : input[:cost]
 
       #BLOCK-RELATED - will be nil if not populated
       @block_id = input[:block_id]
@@ -32,7 +33,7 @@ module Hotel
     end
 
     def projected_cost
-      cost = (duration * COST).to_f.round(2)
+      charge = (duration * @cost).to_f.round(2)
     end
 
     def overlap?(r_start, r_end)

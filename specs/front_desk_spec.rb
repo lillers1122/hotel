@@ -125,6 +125,12 @@ describe "FrontDesk class" do
 
       @concierge.find_cost(2).must_equal 1000.00
     end
+
+    it "returns correct cost for a block room reservation" do
+      @concierge.make_room_block(3, 160, '2018-5-5', '2018-5-7')
+      @concierge.find_cost(1).must_equal 320.00
+
+    end
   end
 
   describe "make_room_block method" do
@@ -134,7 +140,7 @@ describe "FrontDesk class" do
     end
 
     it "accurately makes a room block for specific dates" do
-      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
+      @concierge.make_room_block(3, 160, '2018-5-5', '2018-5-7')
       @concierge.blocks.length.must_equal 1
       @concierge.blocks.first.block_id.must_equal 1
       @concierge.blocks.first.start_date.must_equal Date.parse('2018-5-5')
@@ -142,13 +148,13 @@ describe "FrontDesk class" do
     end
 
     it "accurately updates @blocks" do
-      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
+      @concierge.make_room_block(3, 160, '2018-5-5', '2018-5-7')
       @concierge.blocks.length.must_equal 1
     end
 
     it "raises an ArgumentError if request is for too many rooms" do
       proc {
-        @concierge.make_room_block(6, '2018-5-5', '2018-5-7')
+        @concierge.make_room_block(6, 160, '2018-5-5', '2018-5-7')
       }.must_raise ArgumentError
     end
   end
@@ -157,7 +163,7 @@ describe "FrontDesk class" do
     before do
       @concierge = Hotel::FrontDesk.new
       @concierge.blocks.length.must_equal 0
-      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
+      @concierge.make_room_block(3, 160, '2018-5-5', '2018-5-7')
     end
 
     it "accurately updates @reservations" do
@@ -168,17 +174,12 @@ describe "FrontDesk class" do
       @concierge.reservations.first.block_id.must_equal 1
       @concierge.reservations.first.block_status.must_equal :AVAILABLE
     end
-    # it "accurately calculates total for a room block room" do
-    #   @concierge.room_block(4, '2018-5-5', '2018-5-7')
-    #   @concierge.find_blocked_room(1,1).start_date.must_equal Date.parse('2018-5-5')
-    #
-    # end
   end
 
   describe "find_reservations_in_block() method" do
     it "finds reservations in a given block" do
       @concierge = Hotel::FrontDesk.new
-      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
+      @concierge.make_room_block(3, 160, '2018-5-5', '2018-5-7')
       @concierge.find_reservations_in_block(1).length.must_equal 3
       @concierge.find_reservations_in_block(1).first.must_be_kind_of Hotel::Reservation
     end
@@ -191,15 +192,15 @@ describe "FrontDesk class" do
     end
 
     it "finds room assigned to a particular block" do
-      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
+      @concierge.make_room_block(3, 160, '2018-5-5', '2018-5-7')
       @concierge.find_block_room_ids(1).length.must_equal 3
       a = [2,3,4]
       @concierge.find_block_room_ids(1).must_equal a
     end
 
     it "finds rooms assigned to a particular block" do
-      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
-      @concierge.make_room_block(4, '2018-5-7', '2018-5-14')
+      @concierge.make_room_block(3, 160, '2018-5-5', '2018-5-7')
+      @concierge.make_room_block(4, 160, '2018-5-7', '2018-5-14')
       @concierge.find_block_room_ids(2).length.must_equal 4
     end
   end
@@ -207,7 +208,7 @@ describe "FrontDesk class" do
   describe "reservations_with_available_rooms" do
     before do
       @concierge = Hotel::FrontDesk.new
-      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
+      @concierge.make_room_block(3, 160, '2018-5-5', '2018-5-7')
     end
 
     it "returns the number of reservations with available within a specific block" do
@@ -226,7 +227,7 @@ describe "FrontDesk class" do
   describe "book_blocked_room method" do
     before do
       @concierge = Hotel::FrontDesk.new
-      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
+      @concierge.make_room_block(3, 160, '2018-5-5', '2018-5-7')
     end
 
     it "it updates the reservation of the first room available withtin a block" do
@@ -244,6 +245,12 @@ describe "FrontDesk class" do
     end
   end
 end
+
+# it "accurately calculates total for a room block room" do
+#   @concierge.room_block(4, '2018-5-5', '2018-5-7')
+#   @concierge.find_blocked_room(1,1).start_date.must_equal Date.parse('2018-5-5')
+#
+# end
 
 
 
