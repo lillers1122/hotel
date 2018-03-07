@@ -9,12 +9,13 @@ describe "FrontDesk class" do
 
     it "establishes the base data structures when instantiated" do
       concierge = Hotel::FrontDesk.new
-      [:rooms, :reservations].each do |prop|
+      [:rooms, :reservations, :blocks].each do |prop|
         concierge.must_respond_to prop
       end
 
       concierge.rooms.must_be_kind_of Array
       concierge.reservations.must_be_kind_of Array
+      concierge.blocks.must_be_kind_of Array
     end
   end
 
@@ -50,7 +51,7 @@ describe "FrontDesk class" do
     end
   end
 
-  describe "rooms_availabile method" do
+  describe "rooms_available method" do
     before do
       @concierge = Hotel::FrontDesk.new
       18.times do
@@ -59,13 +60,13 @@ describe "FrontDesk class" do
     end
 
     it "return an array of available rooms for a given date range" do
-      @concierge.rooms_availabile('2018-5-5','2018-5-7').length.must_equal 2
+      @concierge.rooms_available('2018-5-5','2018-5-7').length.must_equal 2
     end
 
     it "must raise an error if no rooms are available" do
       proc {@concierge.reserve_room('2018-5-5','2018-5-7')
       @concierge.reserve_room('2018-5-5','2018-5-7')
-      @concierge.rooms_availabile('2018-5-5','2018-5-7')}.must_raise ArgumentError
+      @concierge.rooms_available('2018-5-5','2018-5-7')}.must_raise ArgumentError
     end
   end
 
@@ -126,5 +127,31 @@ describe "FrontDesk class" do
     end
   end
 
+  describe "room_block method" do
+    before do
+      @concierge = Hotel::FrontDesk.new
+      @concierge.blocks.length.must_equal 0
+    end
+
+    it "accurately makes a room block for specific dates" do
+      @concierge.room_block(3, '2018-5-5', '2018-5-7')
+      @concierge.blocks.length.must_equal 1
+      @concierge.blocks.first.block_id.must_equal 1
+      @concierge.blocks.first.start_date.must_equal Date.parse('2018-5-5')
+      @concierge.blocks.first.end_date.must_equal Date.parse('2018-5-7')
+    end
+
+    it "accurately updates @reservations and @blocks" do
+      @concierge.room_block(3, '2018-5-5', '2018-5-7')
+      @concierge.blocks.length.must_equal 1
+      @concierge.reservations.length.must_equal 3
+    end
+
+    it "raises an ArgumentError if request is for too many rooms" do
+      proc {
+        @concierge.room_block(6, '2018-5-5', '2018-5-7')
+      }.must_raise ArgumentError
+    end
+  end
 
 end

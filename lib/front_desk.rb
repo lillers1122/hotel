@@ -2,18 +2,25 @@ require 'date'
 require 'pry'
 require_relative 'room'
 require_relative 'reservation'
+require_relative 'block'
 #As an administrator, I can access the list of all of the rooms in the hotel
 #As an administrator, I can reserve a room for a given date range
 #As an administrator, I can access the list of reservations for a specific date
 #As an administrator, I can get the total cost for a given reservation
 
 module Hotel
+
+  def self.convert_string_date(string)
+    return Date.parse(string)
+  end
+
   class FrontDesk
-    attr_reader :rooms, :reservations
+    attr_reader :rooms, :reservations, :blocks
 
     def initialize
       @rooms = create_rooms
       @reservations = []
+      @blocks = []
     end
 
     def create_rooms
@@ -37,7 +44,7 @@ module Hotel
       @rooms.find{ |room| room.room_id == room_id }
     end
 
-    def rooms_availabile(r_start, r_end)
+    def rooms_available(r_start, r_end)
       rooms = all_rooms
 
       unavailable_rooms = []
@@ -59,7 +66,7 @@ module Hotel
     end
 
     def reserve_room(r_start, r_end)
-      available_rooms = rooms_availabile(r_start, r_end)
+      available_rooms = rooms_available(r_start, r_end)
       new_room = available_rooms.first
 
       new_reservation = Hotel::Reservation.new({
@@ -94,12 +101,54 @@ module Hotel
       end
     end
 
-    def room_block(r_start, r_end, number)
-      rooms = rooms_availabile(r_start, r_end)
-      #(0..number)
+    def room_block(number, r_start, r_end)
+      if number > 5
+        raise ArgumentError.new("Cannot block more than 5 rooms!")
+      end
 
-      #make a block by ostensibly creating a reservation
+      rooms = (rooms_available(r_start, r_end)).take(number)
+      puts rooms
+
+      new_block = Hotel::Block.new({
+        block_id: @blocks.length + 1,
+        block_rooms: rooms,
+        start_date: r_start,
+        end_date: r_end
+        })
+
+      @blocks << new_block
+      room_block_reservations(new_block)
+      return new_block
+    end
+
+    def room_block_reservations(block)
+      block.block_rooms.each do |room|
+        new_reservation = Hotel::Reservation.new({
+          block_id: block.block_id,
+          reservation_id: @reservations.length + 1,
+          room_id: room,
+          start_date: block.start_date.to_s,
+          end_date: block.end_date.to_s
+          })
+        @reservations << new_reservation
+      end
     end
 
   end
+
+
 end
+
+=begin
+-As an administrator, I can create a block of rooms
+-To create a block you need a date range, collection of rooms and a discounted room rate
+-The collection of rooms should only include rooms that are available for the given date range
+-If a room is set aside in a block, it is not available for reservation by the general public, nor can it be included in another block
+-As an administrator, I can check whether a given block has any rooms available
+-As an administrator, I can reserve a room from within a block of rooms
+
+#Constraints
+-A block can contain a maximum of 5 rooms
+-When a room is reserved from a block of rooms, the reservation dates will always match the date range of the block
+-All of the availability checking logic from Wave 2 should now respect room blocks as well as individual reservations
+=end

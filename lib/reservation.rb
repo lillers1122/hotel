@@ -10,12 +10,14 @@ module Hotel
   COST = 200
   class Reservation
     attr_reader :reservation_id, :room_id, :start_date, :end_date
+    attr_accessor :block_id
 
     def initialize(input)
       @reservation_id = input[:reservation_id]
       @room_id = input[:room_id]
-      @start_date = Date.parse(input[:start_date])
-      @end_date = Date.parse(input[:end_date])
+      @block_id = input[:block_id]
+      @start_date = Hotel.convert_string_date(input[:start_date])
+      @end_date = Hotel.convert_string_date(input[:end_date])
 
       if @end_date != nil && @start_date - @end_date > 0
         raise ArgumentError.new("ENDING BEFORE STARTING IS NOT ALLOWED")
@@ -31,8 +33,8 @@ module Hotel
     end
 
     def overlap?(r_start, r_end)
-      a = Date.parse(r_start)
-      b = Date.parse(r_end)
+      a = Hotel.convert_string_date(r_start)
+      b = Hotel.convert_string_date(r_end)
       num = (b - a).to_i
       range = []
 

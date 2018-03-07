@@ -12,16 +12,17 @@ describe "Block class" do
     end
 
     it "is set up for specific attributes and data types" do
-      [:room_id, :block_id, :start_date, :end_date].each do |prop|
+      [:room_id, :block_id, :start_date, :end_date, :block_rooms, :discount].each do |prop|
         @block.must_respond_to prop
       end
 
       @block.block_id.must_be_kind_of Integer
       @block.start_date.must_be_kind_of Date
+      @block.end_date.must_be_kind_of Date
+      @block.discount.must_be_kind_of Float
+      @block.discount.must_equal 0.80
     end
 
-    # it "sets blocks to an empty array" do
-    #   @block.blocks.length.must_equal 0
-    # end
+
   end
 end

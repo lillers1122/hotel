@@ -12,7 +12,7 @@ module Hotel
     def initialize(input)
       @room_id = input[:room_id]
       @blocks = []
-      @block_status = :AVAILABLE #
+      @block_status = :AVAILABLE #should probably be tied to block only and not room in case of multiple blocks
       # @reservations = []
     end
 
