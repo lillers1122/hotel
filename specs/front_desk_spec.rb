@@ -166,6 +166,7 @@ describe "FrontDesk class" do
 
     it "accurately reserves rooms" do
       @concierge.reservations.first.block_id.must_equal 1
+      @concierge.reservations.first.block_status.must_equal :AVAILABLE
     end
     # it "accurately calculates total for a room block room" do
     #   @concierge.room_block(4, '2018-5-5', '2018-5-7')

@@ -128,7 +128,8 @@ module Hotel
           reservation_id: @reservations.length + 1,
           room_id: room,
           start_date: block.start_date.to_s,
-          end_date: block.end_date.to_s
+          end_date: block.end_date.to_s,
+          block_status: :AVAILABLE
           })
         @reservations << new_reservation
       end
@@ -161,7 +162,9 @@ module Hotel
     end
 
     def book_blocked_room(r_block_id)
-      blocked_rooms(r_block_id)
+      reservations = find_reservations_in_block(r_block_id)
+
+
     end
 
 

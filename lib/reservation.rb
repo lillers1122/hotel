@@ -10,16 +10,17 @@ module Hotel
   COST = 200
   class Reservation
     attr_reader :reservation_id, :room_id, :start_date, :end_date
-    attr_accessor :block_id
-    #:booked
+    attr_accessor :block_id, :block_status
 
     def initialize(input)
       @reservation_id = input[:reservation_id]
       @room_id = input[:room_id]
-      @block_id = input[:block_id]
-      # @block_booked = input[:booked] : false
       @start_date = Hotel.convert_string_date(input[:start_date])
       @end_date = Hotel.convert_string_date(input[:end_date])
+
+      #BLOCK-RELATED - will be nil if not populated
+      @block_id = input[:block_id]
+      @block_status = input[:block_status]
 
       if @end_date != nil && @start_date - @end_date > 0
         raise ArgumentError.new("ENDING BEFORE STARTING IS NOT ALLOWED")
@@ -56,5 +57,6 @@ module Hotel
       end
 
     end
+
   end
 end

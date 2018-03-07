@@ -15,7 +15,7 @@ describe "Reservation class" do
     end
 
     it "is set up for specific attributes and data types" do
-      [:reservation_id, :room_id, :start_date, :end_date].each do |prop|
+      [:reservation_id, :room_id, :start_date, :end_date, :block_id, :block_status].each do |prop|
         @reservation.must_respond_to prop
       end
 
@@ -23,6 +23,8 @@ describe "Reservation class" do
       @reservation.room_id.must_be_kind_of Integer
       @reservation.start_date.must_be_kind_of Date
       @reservation.end_date.must_be_kind_of Date
+      @reservation.block_id.must_be_nil
+      @reservation.block_status.must_be_nil
     end
 
     it "raises an error for invalid Dates" do
