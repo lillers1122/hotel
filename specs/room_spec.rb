@@ -3,7 +3,7 @@ require_relative 'spec_helper'
 describe "Room class" do
   describe "Room initialize" do
     before do
-      @room = Hotel::Room.new(room_id: 1, blocks: [])
+      @room = Hotel::Room.new(room_id: 1)
     end
 
     it "is an instance of Room" do
@@ -11,16 +11,28 @@ describe "Room class" do
     end
 
     it "is set up for specific attributes and data types" do
-      [:room_id, :blocks].each do |prop|
+      [:room_id, :blocks, :block_status].each do |prop|
         @room.must_respond_to prop
       end
 
       @room.room_id.must_be_kind_of Integer
       @room.blocks.must_be_kind_of Array
+      @room.block_status.must_be_kind_of Symbol
     end
 
-    it "sets blocks to an empty array" do
+    it "correctly initializes default data" do
+      @room.room_id.must_equal 1
       @room.blocks.length.must_equal 0
+      @room.block_status.must_equal :AVAILABLE
+    end
+  end
+
+  describe "unavailable method" do
+    it "changes block_status to :UNAVAILABLE" do
+      @room = Hotel::Room.new(room_id: 1)
+      @room.block_status.must_equal :AVAILABLE
+      @room.unavailable
+      @room.block_status.must_equal :UNAVAILABLE
     end
   end
 

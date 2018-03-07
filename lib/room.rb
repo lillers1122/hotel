@@ -7,11 +7,12 @@ require 'date'
 module Hotel
   class Room
     attr_reader :room_id
-    attr_accessor :blocks
+    attr_accessor :blocks, :block_status
 
     def initialize(input)
       @room_id = input[:room_id]
       @blocks = []
+      @block_status = :AVAILABLE #
       # @reservations = []
     end
 
@@ -35,6 +36,10 @@ module Hotel
     #   end
     #   return available_rooms
     # end
+
+    def unavailable
+      @block_status = :UNAVAILABLE
+    end
 
   end
 end
