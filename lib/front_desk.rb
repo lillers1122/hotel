@@ -139,7 +139,7 @@ module Hotel
       @reservations.select { |reservation| reservation.block_id != nil && reservation.block_id == r_block_id}
     end
 
-    def find_blocked_rooms(r_block_id)
+    def find_block_room_ids(r_block_id)
       block_reservations = find_reservations_in_block(r_block_id)
 
       rooms_in_block = []
@@ -150,21 +150,23 @@ module Hotel
       return rooms_in_block
     end
 
-    # def find_blocked_room(r_room_id, r_block_id)
-    #   reservations = find_reservations_in_block(r_block_id)
-    #
-    #   reservations.find { |reservation| reservation.room_id == r_room_id && room.block_id == r_block_id }
-    #
-    # end
+    def reservations_with_available_rooms(r_block_id)
+      reservations = find_reservations_in_block(r_block_id)
 
-    def available_rooms_in_block(r_block_id)
+      acceptable = reservations.select {|block_res| block_res.block_status == :AVAILABLE}
 
+      if acceptable.length == 0
+        raise ArgumentError.new("No rooms in block #{r_block_id} left to book!")
+      else
+        return acceptable
+      end
     end
 
     def book_blocked_room(r_block_id)
-      reservations = find_reservations_in_block(r_block_id)
+      reservation = reservations_with_available_rooms(r_block_id).first
 
-
+      reservation.book_blocked_room
+      return reservation
     end
 
 

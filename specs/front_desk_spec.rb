@@ -184,39 +184,64 @@ describe "FrontDesk class" do
     end
   end
 
-  describe "find_blocked_rooms() method" do
+  describe "find_block_room_ids() method" do
     before do
       @concierge = Hotel::FrontDesk.new
       @concierge.reserve_room('2018-5-5','2018-5-7')
     end
 
-    it "finds rooms assigned to a particular block" do
+    it "finds room assigned to a particular block" do
       @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
-      @concierge.find_blocked_rooms(1).length.must_equal 3
+      @concierge.find_block_room_ids(1).length.must_equal 3
       a = [2,3,4]
-      @concierge.find_blocked_rooms(1).must_equal a
+      @concierge.find_block_room_ids(1).must_equal a
     end
 
     it "finds rooms assigned to a particular block" do
       @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
       @concierge.make_room_block(4, '2018-5-7', '2018-5-14')
-      @concierge.find_blocked_rooms(2).length.must_equal 4
+      @concierge.find_block_room_ids(2).length.must_equal 4
     end
   end
 
-  # describe "find_blocked_room() method" do
-  #   it "returns requested room" do
-  #     @concierge = Hotel::FrontDesk.new
-  #     @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
-  #     a = @concierge.reservations.first
-  #     @concierge.find_blocked_room(1,1).must_equal a
-  #   end
-  # end
+  describe "reservations_with_available_rooms" do
+    before do
+      @concierge = Hotel::FrontDesk.new
+      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
+    end
 
-  describe "available_rooms_in_block" do
+    it "returns the number of reservations with available within a specific block" do
+      @concierge.reservations_with_available_rooms(1).length.must_equal 3
+    end
+
+    it "raises an error if reservations have rooms available" do
+      proc {
+        4.times do
+          @concierge.book_blocked_room(1)
+        end
+      }.must_raise ArgumentError
+    end
   end
 
   describe "book_blocked_room method" do
+    before do
+      @concierge = Hotel::FrontDesk.new
+      @concierge.make_room_block(3, '2018-5-5', '2018-5-7')
+    end
+
+    it "it updates the reservation of the first room available withtin a block" do
+      @concierge.reservations_with_available_rooms(1).length.must_equal 3
+      @concierge.book_blocked_room(1)
+      @concierge.reservations_with_available_rooms(1).length.must_equal 2
+    end
+
+    it "raises an error if no rooms are available" do
+      proc {
+        4.times do
+          @concierge.book_blocked_room(1)
+        end
+      }.must_raise ArgumentError
+    end
   end
 end
 

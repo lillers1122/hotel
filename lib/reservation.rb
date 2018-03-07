@@ -55,8 +55,10 @@ module Hotel
         return false
       else true
       end
-
     end
 
+    def book_blocked_room
+      @block_status = :UNAVAILABLE
+    end
   end
 end
