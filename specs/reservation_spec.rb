@@ -27,9 +27,7 @@ describe "Reservation class" do
       @reservation.block_status.must_be_nil
     end
 
-    it "raises an error for invalid Dates" do
-      @reservation.start_date.must_be_instance_of Date
-      @reservation.end_date.must_be_instance_of Date
+    it "raises an error if end_date is before start_date" do
       invalid_data = {
         reservation_id: 8,
         room_id: 5,
@@ -38,6 +36,26 @@ describe "Reservation class" do
       }
       proc {
         Hotel::Reservation.new(invalid_data)
+      }.must_raise ArgumentError
+    end
+
+    it "raises an error if Dates are invalid" do
+      proc {
+        Hotel::Reservation.new({
+          reservation_id: 8,
+          room_id: 5,
+          start_date: '2018-35-7',
+          end_date: '2018-5-5',
+        })
+      }.must_raise ArgumentError
+
+      proc{
+        Hotel::Reservation.new({
+          reservation_id: 1,
+          room_id: 3,
+          start_date: '2018-37',
+          end_date: '2018-5-1',
+        })
       }.must_raise ArgumentError
     end
   end

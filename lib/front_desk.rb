@@ -23,6 +23,7 @@ module Hotel
       @blocks = []
     end
 
+    #ROOM SPECIFIC - get rid of???:
     def create_rooms
       rooms = []
       20.times do |num|
@@ -44,9 +45,10 @@ module Hotel
       @rooms.find{ |room| room.room_id == room_id }
     end
 
+    #RESERVATION SPECIFIC:
+
     def rooms_available(r_start, r_end)
       rooms = all_rooms
-
       unavailable_rooms = []
 
       @reservations.each do |reservation|
@@ -101,6 +103,7 @@ module Hotel
       end
     end
 
+    #BLOCK SPECIFIC:
     def make_room_block(number, cost, r_start, r_end)
       if number > 5
         raise ArgumentError.new("Cannot block more than 5 rooms!")
@@ -171,10 +174,7 @@ module Hotel
       return reservation
     end
 
-
   end
-
-
 end
 
 =begin
