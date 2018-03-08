@@ -20,7 +20,5 @@ describe "Block class" do
       @block.start_date.must_be_kind_of Date
       @block.end_date.must_be_kind_of Date
     end
-
-
   end
 end
