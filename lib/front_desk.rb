@@ -139,17 +139,6 @@ module Hotel
       @reservations.select { |reservation| reservation.block_id != nil && reservation.block_id == r_block_id}
     end
 
-    def find_block_room_ids(r_block_id)
-      block_reservations = find_reservations_in_block(r_block_id)
-
-      rooms_in_block = []
-
-      block_reservations.each do |block_res|
-        rooms_in_block << block_res.room_id
-      end
-      return rooms_in_block
-    end
-
     def reservations_with_available_rooms(r_block_id)
       reservations = find_reservations_in_block(r_block_id)
 

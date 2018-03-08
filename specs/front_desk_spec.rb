@@ -186,26 +186,6 @@ describe "FrontDesk class" do
     end
   end
 
-  describe "find_block_room_ids() method" do
-    before do
-      @concierge = Hotel::FrontDesk.new
-      @concierge.reserve_room('2018-5-5','2018-5-7')
-    end
-
-    it "finds room assigned to a particular block" do
-      @concierge.make_room_block(3, 160, '2018-5-5', '2018-5-7')
-      @concierge.find_block_room_ids(1).length.must_equal 3
-      a = [2,3,4]
-      @concierge.find_block_room_ids(1).must_equal a
-    end
-
-    it "finds rooms assigned to a particular block" do
-      @concierge.make_room_block(3, 160, '2018-5-5', '2018-5-7')
-      @concierge.make_room_block(4, 160, '2018-5-7', '2018-5-14')
-      @concierge.find_block_room_ids(2).length.must_equal 4
-    end
-  end
-
   describe "reservations_with_available_rooms" do
     before do
       @concierge = Hotel::FrontDesk.new
