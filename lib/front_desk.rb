@@ -90,6 +90,10 @@ module Hotel
       valid.length == 0?  nil : valid
     end
 
+    def find_reservation_by_id(res_id)
+      @reservations.find{ |reservation| reservation.reservation_id == res_id }
+    end
+
     def find_cost(id)
       @reservations.each do |reservation|
         if reservation.reservation_id == id

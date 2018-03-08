@@ -109,6 +109,17 @@ describe "FrontDesk class" do
 
   end
 
+  describe "find_reservation_by_id method" do
+    it "returns the reservation for the id specified" do
+      @concierge = Hotel::FrontDesk.new
+      a = @concierge.reserve_room('2018-5-5','2018-5-7')
+      b = @concierge.reserve_room('2018-5-5','2018-5-10')
+      @concierge.find_reservation_by_id(1).must_equal a
+      @concierge.find_reservation_by_id(2).must_equal b
+    end
+
+  end
+
   describe "find_cost method" do
     before do
       @concierge = Hotel::FrontDesk.new
