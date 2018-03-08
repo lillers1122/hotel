@@ -4,16 +4,12 @@ require_relative './lib/reservation'
 require_relative './lib/block'
 require_relative './lib/room'
 
-
 #Make
 def reserve_room(gustave)
   puts "🍩 Reservation Room 🍩"
   puts "\nReserve a room:"
-  print "\n Please enter a start date: "
-  check_in = gets.chomp
-  print " Please enter an end date: "
-  check_out = gets.chomp
 
+  check_in, check_out = valid_dates?
   a = gustave.reserve_room(check_in, check_out)
 
   puts "\n📅 Room " + a.room_id.to_s + " booked under Reservation ID: " + a.reservation_id.to_s
@@ -54,6 +50,49 @@ def claim_blocked_room(gustave)
 end
 
 #Validate input
+def valid_integer?
+end
+
+def valid_dates?
+  print "\nPlease enter a start date: "
+  r_start = gets.chomp.to_s
+  check_in = valid_start_date?(r_start)
+
+  print "\nPlease enter an end date: "
+  r_end = gets.chomp.to_s
+  check_out = valid_end_date?(check_in, r_end)
+
+  return check_in, check_out
+end
+
+def valid_start_date?(input)
+  checker = Date.parse(input) rescue nil
+  good = input
+
+  until checker.class == Date && checker >= Date.today
+    print "Please enter a valid date: "
+    input = gets.chomp.to_s
+    checker = Date.parse(input) rescue nil
+    good = input
+  end
+  return good
+end
+
+def valid_end_date?(start, input)
+  checker = Date.parse(input) rescue nil
+  good = input
+
+  until checker.class == Date && checker > Date.parse(start)
+    print "Please enter a valid date: "
+    input = gets.chomp.to_s
+    checker = Date.parse(input) rescue nil
+    good = input
+  end
+  return good
+end
+
+
+
 def no_reservations_alert?(gustave) #superfluous?
   if gustave.reservations.length == 0 || (gustave.reservations.length != 0 && gustave.reservations.all? {|reservation| reservation.block_status == :AVAILABLE} == true)
     puts "\n🍩 No reservations on the books at this time!"
@@ -89,8 +128,8 @@ def valid_reservation_id?(gustave)
   return reservation
 end
 
-def valid_date?(gustave)
-  print "\nPlease enter a date: "
+def valid_date?(input) # a booked date
+  print "Please enter a valid date: "
   answer = gets.chomp.to_s
   reservations = gustave.find_reservations_by_date(answer)
 
@@ -102,7 +141,7 @@ def valid_date?(gustave)
   return reservations, answer
 end
 
-def valid_block_id(gustave)
+def valid_block_id?(gustave)
   print "\nPlease enter a valid Block ID: "
   answer = gets.chomp.to_i
   holds = gustave.find_reservations_in_block(answer)
@@ -114,8 +153,6 @@ def valid_block_id(gustave)
   end
   return holds, answer
 end
-
-
 
 #Inspect
 def see_all_reservations(gustave)
@@ -162,7 +199,7 @@ def find_reservations_by_date(gustave)
     return
   end
   #VALIDATE DATE
-  puts "🍩 Find reservation by date 🍩"
+  puts "🍩 Find Reservation by Date 🍩"
   reservations, answer = valid_date?(gustave)
 
   #RETURN RESULTS
@@ -187,7 +224,7 @@ def find_reservation_by_reservation_id(gustave)
   end
 
   #VALIDATE INPUT
-  puts "🍩 Find reservation by Reservation ID 🍩"
+  puts "🍩 Find Reservation by Reservation ID 🍩"
   reservation = valid_reservation_id?(gustave)
 
   #RETURN RESULTS
@@ -212,8 +249,8 @@ def find_block_by_block_id(gustave)
   end
 
   #VALIDATE INPUT
-  puts "\n🎈 Find block by Block ID 🎈"
-  holds, answer = valid_block_id(gustave)
+  puts "\n🎈 Find Block by Block ID 🎈"
+  holds, answer = valid_block_id?(gustave)
 
   #RETURN RESULTS
   puts "\n🎈 You requested Block ID " + answer.to_s + ":"
