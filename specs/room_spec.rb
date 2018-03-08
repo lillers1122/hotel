@@ -15,7 +15,7 @@ describe "Room class" do
       @room.room_id.must_be_kind_of Integer
     end
 
-    it "correctly initializes default data" do
+    it "correctly initializes with a room_id" do
       @room.room_id.must_equal 1
     end
   end

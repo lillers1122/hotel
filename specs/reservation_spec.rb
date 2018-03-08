@@ -103,4 +103,11 @@ describe "Reservation class" do
     end
   end
 
+  describe "book_blocked_room" do
+    it "changes the status of a block room from available to unavailabe" do
+      @my_trip = Hotel::Reservation.new({reservation_id: 1, room_id: 1, start_date: '2018-5-5', end_date: '2018-5-7', block_id: 1, block_status: :AVAILABLE})
+      @my_trip.book_blocked_room
+    end
+  end
+
 end
