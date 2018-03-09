@@ -73,7 +73,6 @@ module Hotel
         end_date: r_end
         })
 
-      #find_room(new_reservation.room_id).add_reservation(new_reservation)
       @reservations << new_reservation
       return new_reservation
     end
@@ -109,7 +108,6 @@ module Hotel
       end
 
       rooms = (rooms_available(r_start, r_end)).take(number)
-      # puts rooms
 
       new_block = Hotel::Block.new({
         block_id: @blocks.length + 1,
