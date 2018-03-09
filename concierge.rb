@@ -10,7 +10,13 @@ def reserve_room(gustave)
   puts "\nReserve a room:"
 
   check_in, check_out = valid_dates?
-  a = gustave.reserve_room(check_in, check_out)
+
+  begin
+    a = gustave.reserve_room(check_in, check_out)
+  rescue
+    puts "\n 🍄 No rooms available!"
+    return
+  end
 
   puts "\n📅 Room " + a.room_id.to_s + " booked under Reservation ID: " + a.reservation_id.to_s
   puts " from " + a.start_date.to_s + " to " + a.end_date.to_s
@@ -21,15 +27,21 @@ def reserve_block(gustave)
   puts "🎈 Create New Block 🎈"
   puts "\nHold a block of rooms:"
   print "\n Please enter the number of rooms (5 max): "
-    rooms = gets.chomp.to_i
-  print " Please enter the nightly rate: "
-    rate = gets.chomp.to_i
-  print " Please enter a start date: "
-    check_in = gets.chomp
-  print " Please enter an end date: "
-    check_out = gets.chomp
-  puts ""
-  a = gustave.make_room_block(rooms, rate, check_in, check_out)
+    entered_rooms = gets.chomp.to_i
+    rooms = valid_integer?(entered_rooms)
+
+  print "\n Please enter the nightly rate: "
+    rate_entry = gets.chomp.to_i
+    rate = valid_integer?(rate_entry)
+
+  check_in, check_out = valid_dates?
+
+  begin
+    a = gustave.make_room_block(rooms, rate, check_in, check_out)
+  rescue
+    puts "\n 🍄 Cannot block more than 5 rooms!"
+    return
+  end
 
   puts "\n📅 Rooms: " + a.block_rooms.to_s + " reserved under Block ID: " + a.block_id.to_s
   puts " from " + a.start_date.to_s + " to " + a.end_date.to_s
@@ -39,26 +51,43 @@ end
 def claim_blocked_room(gustave)
   puts "🎈 Reserve Block Room 🎈"
   puts "\nReserve a room from a block:"
-  print "\nPlease enter the Block ID number: "
-    number = gets.chomp.to_i
-  a = gustave.reservations_with_available_rooms(number).first
+
+  if no_blocks_alert?(gustave) == false
+    return
+  end
+
+  holds, block_id = valid_block_id?(gustave)
+
+  begin
+    a = gustave.reservations_with_available_rooms(block_id).first
+  rescue
+    puts "\n 🍄 No rooms left in this block!"
+    return
+  end
 
   puts "\n📅 Room " + a.room_id.to_s + " booked under Reservation ID: " + a.reservation_id.to_s
   puts " from " + a.start_date.to_s + " to " + a.end_date.to_s
-  gustave.book_blocked_room(number)
+  gustave.book_blocked_room(block_id)
   puts ""
 end
 
 #Validate input
-def valid_integer?
+def valid_integer?(input)
+  number = input
+  until input > 0
+    print "  Please enter a valid number: "
+    input = gets.chomp.to_i
+    number = input
+  end
+  return number
 end
 
 def valid_dates?
-  print "\nPlease enter a start date: "
+  print "\n Please enter a start date: "
   r_start = gets.chomp.to_s
   check_in = valid_start_date?(r_start)
 
-  print "\nPlease enter an end date: "
+  print "\n Please enter an end date: "
   r_end = gets.chomp.to_s
   check_out = valid_end_date?(check_in, r_end)
 
@@ -70,7 +99,7 @@ def valid_start_date?(input)
   good = input
 
   until checker.class == Date && checker >= Date.today
-    print "Please enter a valid date: "
+    print " Please enter a valid date: "
     input = gets.chomp.to_s
     checker = Date.parse(input) rescue nil
     good = input
@@ -83,7 +112,7 @@ def valid_end_date?(start, input)
   good = input
 
   until checker.class == Date && checker > Date.parse(start)
-    print "Please enter a valid date: "
+    print " Please enter a valid date: "
     input = gets.chomp.to_s
     checker = Date.parse(input) rescue nil
     good = input
@@ -91,19 +120,14 @@ def valid_end_date?(start, input)
   return good
 end
 
-
-
+#Alerts
 def no_reservations_alert?(gustave) #superfluous?
   if gustave.reservations.length == 0 || (gustave.reservations.length != 0 && gustave.reservations.all? {|reservation| reservation.block_status == :AVAILABLE} == true)
     puts "\n🍩 No reservations on the books at this time!"
     return false
-  # elsif (gustave.reservations.length != 0 && gustave.reservations.all? {|reservation| (reservation.block_id != nil && reservation.block_status == :AVAILABLE)} == true)
-  #   puts "\n🍩 No reservations on the books at this time!"
-  #   return false
   else
     return true
   end
-
 end
 
 def no_blocks_alert?(gustave)
@@ -116,25 +140,25 @@ def no_blocks_alert?(gustave)
 end
 
 def valid_reservation_id?(gustave)
-  print "\nPlease enter a valid Reservation ID: "
+  print "\n Please enter a valid Reservation ID: "
   answer = gets.chomp.to_i
   reservation = gustave.find_reservation_by_id(answer)
 
   until reservation != nil
-    print "Please enter a valid Reservation ID: "
+    print " Please enter a valid Reservation ID: "
     answer = gets.chomp.to_i
     reservation = gustave.find_reservation_by_id(answer)
   end
   return reservation
 end
 
-def valid_date?(input) # a booked date
-  print "Please enter a valid date: "
+def valid_date?(gustave) # a booked date
+  print "\n Please enter a valid date: "
   answer = gets.chomp.to_s
   reservations = gustave.find_reservations_by_date(answer)
 
   until reservations != nil
-    print "Please enter a valid date: "
+    print " Please enter a valid date: "
     answer = gets.chomp.to_s
     reservations = gustave.find_reservations_by_date(answer)
   end
@@ -142,14 +166,18 @@ def valid_date?(input) # a booked date
 end
 
 def valid_block_id?(gustave)
-  print "\nPlease enter a valid Block ID: "
+  print "\n Please enter a valid Block ID: "
   answer = gets.chomp.to_i
   holds = gustave.find_reservations_in_block(answer)
 
-  until holds != nil
-    print "Please enter a valid Block ID: "
+  # if gustave.reservations_with_available_rooms(block_id) == false
+  #   puts "No rooms left in this block!"
+  #   return
+
+  until answer > 0 && holds.length != 0
+    print " Please enter a valid Block ID: "
     answer = gets.chomp.to_i
-    holds = gustave.find_reservation_by_id(answer)
+    holds = gustave.find_reservations_in_block(answer)
   end
   return holds, answer
 end
@@ -198,22 +226,25 @@ def find_reservations_by_date(gustave)
   if no_reservations_alert?(gustave) == false
     return
   end
+
   #VALIDATE DATE
-  puts "🍩 Find Reservation by Date 🍩"
+  puts "🍩 Find Reservations by Date 🍩"
   reservations, answer = valid_date?(gustave)
 
   #RETURN RESULTS
   puts "\n🍩 You requested " + answer.to_s + ":"
   reservations.each do |reservation|
-    puts "\nReservation ID: " + reservation.reservation_id.to_s
-    if reservation.block_id != nil
-      puts "Block ID: " + reservation.block_id.to_s
+    if (reservation.block_id == nil && reservation.block_status == nil) || (reservation.block_id != nil && reservation.block_status == :UNAVAILABLE)
+      puts "\nReservation ID: " + reservation.reservation_id.to_s
+      if reservation.block_id != nil
+        puts "Block ID: " + reservation.block_id.to_s
+      end
+      puts "  Room Number: " + reservation.room_id.to_s
+      puts "  Nightly rate: " + reservation.cost.to_s
+      puts "  Check-in: " + reservation.start_date.to_s
+      puts "  Check-out: " + reservation.end_date.to_s
+      puts ". . . . . . . . . . . . ."
     end
-    puts "  Room Number: " + reservation.room_id.to_s
-    puts "  Nightly rate: " + reservation.cost.to_s
-    puts "  Check-in: " + reservation.start_date.to_s
-    puts "  Check-out: " + reservation.end_date.to_s
-    puts ". . . . . . . . . . . . ."
   end
   puts ""
 end
@@ -299,13 +330,11 @@ def calculate_costs(gustave)
   puts ""
 end
 
-
-
-
+#Begin Interface
 concierge = Hotel::FrontDesk.new
 
-continue = ""
-while continue != "N"
+command = ""
+while command != "NO"
 
 puts "\n✨🌟 🏨 Front Desk Portal 🏨 🌟✨"
 puts "- - - - - - - - - - - - - -"
@@ -346,22 +375,11 @@ elsif answer == "H"
   find_block_by_block_id(concierge)
 elsif answer == "I"
   calculate_costs(concierge)
-# else exit?
 end
 
-
-#press any key to continue or enter exit to quit
-print "\nWould you like to continue using Front Desk Portal? (y/n): "
-continue = gets.chomp.upcase
-valid_continue_options = ["Y","N"]
-until valid_continue_options.include?(continue)
-  print "Please enter y if you want to continue (Y or N)"
-  continue = gets.chomp.upcase
-end
+print "\n☕️ Would you like to continue using Front Desk Portal? ☕️
+Enter any key to continue or 'no' to exit: "
+command = gets.chomp.upcase
 end
 
-
-#check input for making things
-#what to do with invalid number of nights?
-#what to do with invalid date - past date! OKay? be able to look at previous trips too?? but not make trips in the past?
 #what to do with past reservations? if saving to csv
