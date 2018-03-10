@@ -1,3 +1,4 @@
+#Lily Sky | Ada c9 Ampers | Hotel Project, Ruby
 require 'date'
 require 'pry'
 require_relative 'room'
@@ -15,9 +16,7 @@ module Hotel
     end
 
     def blocks_csv_prep
-
       array = [@start_date, @end_date, @cost, @block_id] + @block_rooms
-
     end
   end
 end

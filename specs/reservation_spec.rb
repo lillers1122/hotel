@@ -1,3 +1,4 @@
+#Lily Sky | Ada c9 Ampers | Hotel Project, Ruby
 require 'pry'
 require_relative 'spec_helper'
 
@@ -107,6 +108,22 @@ describe "Reservation class" do
     it "changes the status of a block room from available to unavailabe" do
       @my_trip = Hotel::Reservation.new({reservation_id: 1, room_id: 1, start_date: '2018-5-5', end_date: '2018-5-7', block_id: 1, block_status: :AVAILABLE})
       @my_trip.book_blocked_room
+    end
+  end
+
+  describe "reservations_csv_prep" do
+    it "creates an Array of the relevant data" do
+      @my_trip = Hotel::Reservation.new({reservation_id: 1, room_id: 1, start_date: '2018-5-5', end_date: '2018-5-7', block_id: 1, block_status: :AVAILABLE})
+
+      @my_trip.reservations_csv_prep.must_be_kind_of Array
+
+      @my_trip.reservations_csv_prep[0].must_equal 1
+      @my_trip.reservations_csv_prep[1].must_equal 1
+      @my_trip.reservations_csv_prep[2].must_equal Date.parse('2018-5-5')
+      @my_trip.reservations_csv_prep[3].must_equal Date.parse('2018-5-7')
+      @my_trip.reservations_csv_prep[4].must_equal 200
+      @my_trip.reservations_csv_prep[5].must_equal 1
+      @my_trip.reservations_csv_prep[6].must_equal :AVAILABLE
     end
   end
 

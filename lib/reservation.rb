@@ -1,3 +1,4 @@
+#Lily Sky | Ada c9 Ampers | Hotel Project, Ruby
 require 'date'
 
 module Hotel

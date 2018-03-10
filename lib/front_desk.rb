@@ -1,3 +1,4 @@
+#Lily Sky | Ada c9 Ampers | Hotel Project, Ruby
 require 'csv'
 require 'date'
 require 'pry'
@@ -14,9 +15,8 @@ module Hotel
   class FrontDesk
 
     attr_reader :rooms, :reservations, :blocks
-    attr_accessor :reservations_file, :blocks_file
 
-    def initialize(reservations_file,blocks_file)
+    def initialize(reservations_file, blocks_file)
       @reservations_file = reservations_file.to_s
       @blocks_file = blocks_file.to_s
       @rooms = create_rooms
@@ -24,7 +24,7 @@ module Hotel
       @blocks = load_blocks
     end
 
-    #LOAD CSV
+    #LOAD CSV:
     def load_reservations
       my_file = CSV.open(@reservations_file, headers: true)
 
@@ -63,9 +63,6 @@ module Hotel
       end
       return all_blocks
     end
-
-#'support/reservations.csv'
-#'support/blocks.csv'
 
     #ROOM SPECIFIC - get rid of???:
     def create_rooms

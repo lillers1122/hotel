@@ -1,4 +1,4 @@
-require 'pry'
+#Lily Sky | Ada c9 Ampers | Hotel Project, Ruby
 require_relative './lib/front_desk'
 require_relative './lib/reservation'
 require_relative './lib/block'
@@ -385,5 +385,3 @@ print "\n☕️ Would you like to continue using Front Desk Portal? ☕️
 Enter any key to continue or 'no' to exit: "
 command = gets.chomp.upcase
 end
-
-#what to do with past reservations? if saving to csv
