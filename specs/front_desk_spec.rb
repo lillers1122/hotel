@@ -3,12 +3,12 @@ require_relative 'spec_helper'
 describe "FrontDesk class" do
   describe "Initializer" do
     it "is an instance of FrontDesk" do
-      concierge = Hotel::FrontDesk.new
+      concierge = Hotel::FrontDesk.new('support/test_reservations.csv', 'support/test_blocks.csv')
       concierge.must_be_kind_of Hotel::FrontDesk
     end
 
     it "establishes the base data structures when instantiated" do
-      concierge = Hotel::FrontDesk.new
+      concierge = Hotel::FrontDesk.new('support/test_reservations.csv', 'support/test_blocks.csv')
       [:rooms, :reservations, :blocks].each do |prop|
         concierge.must_respond_to prop
       end
@@ -21,7 +21,7 @@ describe "FrontDesk class" do
 
   describe "create_room method" do
     before do
-      @concierge = Hotel::FrontDesk.new
+      @concierge = Hotel::FrontDesk.new('support/test_reservations.csv', 'support/test_blocks.csv')
       @concierge.create_rooms
     end
     it "creates 20 rooms" do
@@ -36,7 +36,7 @@ describe "FrontDesk class" do
 
   describe "all_rooms method" do
     it "prints a list of every room_id in the hotel" do
-      concierge = Hotel::FrontDesk.new
+      concierge = Hotel::FrontDesk.new('support/test_reservations.csv', 'support/test_blocks.csv')
       concierge.all_rooms.must_be_kind_of Array
       concierge.all_rooms.length.must_equal 20
       concierge.all_rooms.first.must_equal 1
@@ -46,14 +46,14 @@ describe "FrontDesk class" do
 
   describe "find_room method" do #unnecessary?
     it "finds a specific room" do
-      concierge = Hotel::FrontDesk.new
+      concierge = Hotel::FrontDesk.new('support/test_reservations.csv', 'support/test_blocks.csv')
       concierge.find_room(1).room_id.must_equal 1
     end
   end
 
   describe "rooms_available method" do
     before do
-      @concierge = Hotel::FrontDesk.new
+      @concierge = Hotel::FrontDesk.new('support/test_reservations.csv', 'support/test_blocks.csv')
       18.times do
         @concierge.reserve_room('2018-5-5','2018-5-7')
       end
@@ -72,7 +72,7 @@ describe "FrontDesk class" do
 
   describe "reserve_room method" do
     before do
-      @concierge = Hotel::FrontDesk.new
+      @concierge = Hotel::FrontDesk.new('support/test_reservations.csv', 'support/test_blocks.csv')
       @concierge.reservations.length.must_equal 0
     end
 
@@ -94,7 +94,7 @@ describe "FrontDesk class" do
 
   describe "find_reservations_by_date method" do
     before do
-      @concierge = Hotel::FrontDesk.new
+      @concierge = Hotel::FrontDesk.new('support/test_reservations.csv', 'support/test_blocks.csv')
       @concierge.reserve_room('2018-5-5','2018-5-7')
       @concierge.reserve_room('2018-5-5','2018-5-10')
     end
@@ -111,7 +111,7 @@ describe "FrontDesk class" do
 
   describe "find_reservation_by_id method" do
     it "returns the reservation for the id specified" do
-      @concierge = Hotel::FrontDesk.new
+      @concierge = Hotel::FrontDesk.new('support/test_reservations.csv', 'support/test_blocks.csv')
       a = @concierge.reserve_room('2018-5-5','2018-5-7')
       b = @concierge.reserve_room('2018-5-5','2018-5-10')
       @concierge.find_reservation_by_id(1).must_equal a
@@ -122,7 +122,7 @@ describe "FrontDesk class" do
 
   describe "find_cost method" do
     before do
-      @concierge = Hotel::FrontDesk.new
+      @concierge = Hotel::FrontDesk.new('support/test_reservations.csv', 'support/test_blocks.csv')
     end
 
     it "returns the cost of the first reservation" do
@@ -147,7 +147,7 @@ describe "FrontDesk class" do
 
   describe "make_room_block method" do
     before do
-      @concierge = Hotel::FrontDesk.new
+      @concierge = Hotel::FrontDesk.new('support/test_reservations.csv', 'support/test_blocks.csv')
       @concierge.blocks.length.must_equal 0
     end
 
@@ -173,7 +173,7 @@ describe "FrontDesk class" do
 
   describe "room_block_reservations helper method" do
     before do
-      @concierge = Hotel::FrontDesk.new
+      @concierge = Hotel::FrontDesk.new('support/test_reservations.csv', 'support/test_blocks.csv')
       @concierge.blocks.length.must_equal 0
       @concierge.make_room_block(3, 160, '2018-5-5', '2018-5-7')
     end
@@ -190,7 +190,7 @@ describe "FrontDesk class" do
 
   describe "find_reservations_in_block() method" do
     it "finds reservations in a given block" do
-      @concierge = Hotel::FrontDesk.new
+      @concierge = Hotel::FrontDesk.new('support/test_reservations.csv', 'support/test_blocks.csv')
       @concierge.make_room_block(3, 160, '2018-5-5', '2018-5-7')
       @concierge.find_reservations_in_block(1).length.must_equal 3
       @concierge.find_reservations_in_block(1).first.must_be_kind_of Hotel::Reservation
@@ -199,7 +199,7 @@ describe "FrontDesk class" do
 
   describe "reservations_with_available_rooms" do
     before do
-      @concierge = Hotel::FrontDesk.new
+      @concierge = Hotel::FrontDesk.new('support/test_reservations.csv', 'support/test_blocks.csv')
       @concierge.make_room_block(3, 160, '2018-5-5', '2018-5-7')
     end
 
@@ -218,7 +218,7 @@ describe "FrontDesk class" do
 
   describe "book_blocked_room method" do
     before do
-      @concierge = Hotel::FrontDesk.new
+      @concierge = Hotel::FrontDesk.new('support/test_reservations.csv', 'support/test_blocks.csv')
       @concierge.make_room_block(3, 160, '2018-5-5', '2018-5-7')
     end
 

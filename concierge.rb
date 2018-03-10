@@ -335,7 +335,7 @@ def calculate_costs(gustave)
 end
 
 #Begin Interface
-concierge = Hotel::FrontDesk.new
+concierge = Hotel::FrontDesk.new('support/reservations.csv', 'support/blocks.csv')
 
 command = ""
 while command != "NO"

@@ -6,14 +6,19 @@ require_relative 'reservation'
 require_relative 'block'
 
 module Hotel
+
   def self.convert_string_date(string)
     return Date.parse(string)
   end
 
   class FrontDesk
-    attr_reader :rooms, :reservations, :blocks
 
-    def initialize
+    attr_reader :rooms, :reservations, :blocks
+    attr_accessor :reservations_file, :blocks_file
+
+    def initialize(reservations_file,blocks_file)
+      @reservations_file = reservations_file.to_s
+      @blocks_file = blocks_file.to_s
       @rooms = create_rooms
       @reservations = load_reservations
       @blocks = load_blocks
@@ -21,7 +26,7 @@ module Hotel
 
     #LOAD CSV
     def load_reservations
-      my_file = CSV.open('support/reservations.csv', headers: true)
+      my_file = CSV.open(@reservations_file, headers: true)
 
       all_reservations = []
       my_file.each do |line|
@@ -42,7 +47,7 @@ module Hotel
     end
 
     def load_blocks
-      my_file = CSV.open('support/blocks.csv', headers: true)
+      my_file = CSV.open(@blocks_file, headers: true)
 
       all_blocks = []
       my_file.each do |line|
@@ -58,6 +63,9 @@ module Hotel
       end
       return all_blocks
     end
+
+#'support/reservations.csv'
+#'support/blocks.csv'
 
     #ROOM SPECIFIC - get rid of???:
     def create_rooms
@@ -203,7 +211,7 @@ module Hotel
     #WRITE CSV
     def save_reservations
       headers = ["reservation_id","room_id","start_date","end_date","cost","block_id","block_status"]
-      CSV.open('support/reservations.csv', 'wb') do |csv|
+      CSV.open(@reservations_file, 'wb') do |csv|
         csv << headers
         @reservations.each do |reservation|
           csv << reservation.reservations_csv_prep
@@ -214,7 +222,7 @@ module Hotel
 
     def save_blocks
       headers = ['start_date','end_date','cost','block_id','block_rooms']
-      CSV.open('support/blocks.csv', 'wb') do |csv|
+      CSV.open(@blocks_file, 'wb') do |csv|
         csv << headers
         @blocks.each do |block|
           csv << block.blocks_csv_prep
