@@ -64,7 +64,7 @@ module Hotel
       return all_blocks
     end
 
-    #ROOM SPECIFIC - get rid of???:
+    #ROOM SPECIFIC:
     def create_rooms
       rooms = []
       20.times do |num|
