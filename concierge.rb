@@ -6,7 +6,7 @@ require_relative './lib/room'
 
 #Make
 def reserve_room(gustave)
-  puts "🍩 Reservation Room 🍩"
+  puts "🍩 Reserve Room 🍩"
   puts "\nReserve a room:"
 
   check_in, check_out = valid_dates?
