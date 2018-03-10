@@ -1,4 +1,3 @@
-require 'awesome_print'
 require 'date'
 
 module Hotel
@@ -54,6 +53,10 @@ module Hotel
 
     def book_blocked_room
       @block_status = :UNAVAILABLE
+    end
+
+    def reservations_csv_prep
+      array = [@reservation_id, @room_id, @start_date, @end_date, @cost, @block_id, @block_status]
     end
   end
 end

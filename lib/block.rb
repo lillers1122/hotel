@@ -14,5 +14,10 @@ module Hotel
       super
     end
 
+    def blocks_csv_prep
+
+      array = [@start_date, @end_date, @cost, @block_id] + @block_rooms
+
+    end
   end
 end

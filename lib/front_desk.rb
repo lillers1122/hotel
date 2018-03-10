@@ -1,3 +1,4 @@
+require 'csv'
 require 'date'
 require 'pry'
 require_relative 'room'
@@ -5,8 +6,7 @@ require_relative 'reservation'
 require_relative 'block'
 
 module Hotel
-
-  def self.convert_string_date(string) #will raise error if input is invalid date
+  def self.convert_string_date(string)
     return Date.parse(string)
   end
 
@@ -15,8 +15,48 @@ module Hotel
 
     def initialize
       @rooms = create_rooms
-      @reservations = []
-      @blocks = []
+      @reservations = load_reservations
+      @blocks = load_blocks
+    end
+
+    #LOAD CSV
+    def load_reservations
+      my_file = CSV.open('support/reservations.csv', headers: true)
+
+      all_reservations = []
+      my_file.each do |line|
+        input_data = {}
+        #status logic
+        input_data[:reservation_id] = line[0].to_i
+        input_data[:room_id] = line[1].to_i
+        input_data[:start_date] = line[2]
+        input_data[:end_date] = line[3]
+        input_data[:cost] = line[4].to_i
+        if line[5].to_i != 0 && line[6] != nil
+          input_data[:block_id] = line[5].to_i
+          input_data[:block_status] = line[6].to_sym ||= nil
+        end
+        all_reservations << Reservation.new(input_data)
+      end
+      return all_reservations
+    end
+
+    def load_blocks
+      my_file = CSV.open('support/blocks.csv', headers: true)
+
+      all_blocks = []
+      my_file.each do |line|
+        input_data = {}
+        #status logic
+        input_data[:start_date] = line[0]
+        input_data[:end_date] = line[1]
+        input_data[:cost] = line[2].to_i
+        input_data[:block_id] = line[3].to_i
+        input_data[:block_rooms] = line[4..-1].map { |room| room.to_i}
+
+        all_blocks << Block.new(input_data)
+      end
+      return all_blocks
     end
 
     #ROOM SPECIFIC - get rid of???:
@@ -158,6 +198,28 @@ module Hotel
 
       reservation.book_blocked_room
       return reservation
+    end
+
+    #WRITE CSV
+    def save_reservations
+      headers = ["reservation_id","room_id","start_date","end_date","cost","block_id","block_status"]
+      CSV.open('support/reservations.csv', 'wb') do |csv|
+        csv << headers
+        @reservations.each do |reservation|
+          csv << reservation.reservations_csv_prep
+        end
+      end
+
+    end
+
+    def save_blocks
+      headers = ['start_date','end_date','cost','block_id','block_rooms']
+      CSV.open('support/blocks.csv', 'wb') do |csv|
+        csv << headers
+        @blocks.each do |block|
+          csv << block.blocks_csv_prep
+        end
+      end
     end
 
   end

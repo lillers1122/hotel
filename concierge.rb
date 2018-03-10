@@ -21,6 +21,7 @@ def reserve_room(gustave)
   puts "\n📅 Room " + a.room_id.to_s + " booked under Reservation ID: " + a.reservation_id.to_s
   puts " from " + a.start_date.to_s + " to " + a.end_date.to_s
   puts ""
+  gustave.save_reservations
 end
 
 def reserve_block(gustave)
@@ -46,6 +47,8 @@ def reserve_block(gustave)
   puts "\n📅 Rooms: " + a.block_rooms.to_s + " reserved under Block ID: " + a.block_id.to_s
   puts " from " + a.start_date.to_s + " to " + a.end_date.to_s
   puts ""
+  gustave.save_blocks
+  gustave.save_reservations
 end
 
 def claim_blocked_room(gustave)
@@ -69,6 +72,7 @@ def claim_blocked_room(gustave)
   puts " from " + a.start_date.to_s + " to " + a.end_date.to_s
   gustave.book_blocked_room(block_id)
   puts ""
+  gustave.save_reservations
 end
 
 #Validate input
