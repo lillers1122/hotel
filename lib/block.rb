@@ -1,7 +1,5 @@
 #Lily Sky | Ada c9 Ampers | Hotel Project, Ruby
 require 'date'
-require 'pry'
-require_relative 'room'
 require_relative 'reservation'
 
 module Hotel

@@ -218,7 +218,7 @@ module Hotel
     end
 
     def save_blocks
-      headers = ['start_date','end_date','cost','block_id','block_rooms']
+      headers = ["start_date","end_date","cost","block_id","block_rooms"]
       CSV.open(@blocks_file, 'wb') do |csv|
         csv << headers
         @blocks.each do |block|
