@@ -3,8 +3,7 @@ require 'date'
 
 module Hotel
   class Reservation
-    attr_reader :reservation_id, :room_id, :start_date, :end_date
-    attr_accessor :block_id, :block_status, :cost
+    attr_reader :reservation_id, :room_id, :start_date, :end_date, :block_id, :block_status, :cost
 
     def initialize(input)
       @reservation_id = input[:reservation_id]

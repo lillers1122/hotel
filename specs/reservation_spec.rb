@@ -74,13 +74,23 @@ describe "Reservation class" do
   end
 
   describe "projected_cost method" do
-    it "calculates trip length in nights" do
+    it "calculates trip cost for a normal reservation" do
       data = {reservation_id: 1, room_id: 1, start_date: '2018-5-5', end_date: '2018-5-7'}
 
       my_trip = Hotel::Reservation.new(data)
       my_trip.projected_cost.must_be_instance_of Float
       my_trip.projected_cost.must_equal 400.00
     end
+
+    it "calculates trip cost for an unavailable block reservation" do
+      data = {reservation_id: 1, block_id: 1, cost: 180, room_id: 1, start_date: '2018-5-5', end_date: '2018-5-7'}
+
+      my_trip = Hotel::Reservation.new(data)
+      my_trip.projected_cost.must_be_instance_of Float
+      my_trip.projected_cost.must_equal 360.00
+    end
+
+
   end
 
   describe "overlap? method" do
