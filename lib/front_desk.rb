@@ -6,6 +6,13 @@ require_relative 'room'
 require_relative 'reservation'
 require_relative 'block'
 
+# contents map - - - -
+#LOAD CSV
+#ROOM SPECIFIC
+#RESERVATION SPECIFIC
+#WRITE CSV
+# - - - - - - - - - -
+
 module Hotel
 
   def self.convert_string_date(string)
@@ -205,7 +212,7 @@ module Hotel
       return reservation
     end
 
-    #WRITE CSV
+    #WRITE CSV:
     def save_reservations
       headers = ["reservation_id","room_id","start_date","end_date","cost","block_id","block_status"]
       CSV.open(@reservations_file, 'wb') do |csv|

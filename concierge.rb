@@ -4,6 +4,15 @@ require_relative './lib/reservation'
 require_relative './lib/block'
 require_relative './lib/room'
 
+# contents map - - - -
+#Make
+#Validate input
+#Alerts
+#Inspect
+#Calculate
+#Begin Interface
+# - - - - - - - - - -
+
 #Make
 def reserve_room(gustave)
   puts "🍩 Reserve Room 🍩"
@@ -124,25 +133,6 @@ def valid_end_date?(start, input)
   return good
 end
 
-#Alerts
-def no_reservations_alert?(gustave) #superfluous?
-  if gustave.reservations.length == 0 || (gustave.reservations.length != 0 && gustave.reservations.all? {|reservation| reservation.block_status == :AVAILABLE} == true)
-    puts "\n🍩 No reservations on the books at this time!"
-    return false
-  else
-    return true
-  end
-end
-
-def no_blocks_alert?(gustave)
-  if gustave.blocks.length == 0
-    puts "\n🎈 No blocks on the books at this time!"
-    return false
-  else
-    return true
-  end
-end
-
 def valid_reservation_id?(gustave)
   print "\n Please enter a valid Reservation ID: "
   answer = gets.chomp.to_i
@@ -174,16 +164,31 @@ def valid_block_id?(gustave)
   answer = gets.chomp.to_i
   holds = gustave.find_reservations_in_block(answer)
 
-  # if gustave.reservations_with_available_rooms(block_id) == false
-  #   puts "No rooms left in this block!"
-  #   return
-
   until answer > 0 && holds.length != 0
     print " Please enter a valid Block ID: "
     answer = gets.chomp.to_i
     holds = gustave.find_reservations_in_block(answer)
   end
   return holds, answer
+end
+
+#Alerts
+def no_reservations_alert?(gustave) #superfluous?
+  if gustave.reservations.length == 0 || (gustave.reservations.length != 0 && gustave.reservations.all? {|reservation| reservation.block_status == :AVAILABLE} == true)
+    puts "\n🍩 No reservations on the books at this time!"
+    return false
+  else
+    return true
+  end
+end
+
+def no_blocks_alert?(gustave)
+  if gustave.blocks.length == 0
+    puts "\n🎈 No blocks on the books at this time!"
+    return false
+  else
+    return true
+  end
 end
 
 #Inspect

@@ -27,7 +27,6 @@ describe "Reservation class" do
       @reservation.cost.must_be_kind_of Integer
       @reservation.block_id.must_be_nil
       @reservation.block_status.must_be_nil
-
     end
 
     it "raises an error if end_date is before start_date" do
@@ -83,14 +82,25 @@ describe "Reservation class" do
     end
 
     it "calculates trip cost for an unavailable block reservation" do
-      data = {reservation_id: 1, block_id: 1, cost: 180, room_id: 1, start_date: '2018-5-5', end_date: '2018-5-7'}
+      data = {reservation_id: 1, block_id: 1, cost: 180, room_id: 1, start_date: '2018-5-5', end_date: '2018-5-7', block_status: :UNAVAILABLE}
 
       my_trip = Hotel::Reservation.new(data)
       my_trip.projected_cost.must_be_instance_of Float
       my_trip.projected_cost.must_equal 360.00
     end
 
+    it "calculates trip cost for an available block reservation" do
+      data = {reservation_id: 1, block_id: 1, cost: 150, room_id: 1, start_date: '2018-5-5', end_date: '2018-5-7', block_status: :AVAILABLE}
 
+      my_trip = Hotel::Reservation.new(data)
+      my_trip.projected_cost.must_be_instance_of Float
+      my_trip.projected_cost.must_equal 300.00
+    end
+
+    it "doesn't calculate trip cost for non-existant reservation" do
+      proc {
+        my_trip.projected_cost}.must_raise NameError
+    end
   end
 
   describe "overlap? method" do
@@ -116,7 +126,7 @@ describe "Reservation class" do
 
   describe "book_blocked_room" do
     it "changes the status of a block room from available to unavailabe" do
-      @my_trip = Hotel::Reservation.new({reservation_id: 1, room_id: 1, start_date: '2018-5-5', end_date: '2018-5-7', block_id: 1, block_status: :AVAILABLE})
+      @my_trip = Hotel::Reservation.new(reservation_id: 1, room_id: 1, start_date: '2018-5-5', end_date: '2018-5-7', block_id: 1, block_status: :AVAILABLE)
       @my_trip.book_blocked_room
     end
   end
