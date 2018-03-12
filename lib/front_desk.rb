@@ -142,15 +142,18 @@ module Hotel
     end
 
     def find_reservation_by_id(res_id)
-      @reservations.find{ |reservation| reservation.reservation_id == res_id }
+      a = @reservations.find{ |reservation| reservation.reservation_id == res_id }
+
+      if a == nil
+        raise ArgumentError.new("Invalid Reservation ID")
+      else
+        return a
+      end
     end
 
-    def find_cost(id)
-      @reservations.each do |reservation|
-        if reservation.reservation_id == id
-          return reservation.projected_cost
-        end
-      end
+    def find_cost(res_id)
+      reservation = find_reservation_by_id(res_id)
+      reservation.projected_cost
     end
 
     #BLOCK SPECIFIC:

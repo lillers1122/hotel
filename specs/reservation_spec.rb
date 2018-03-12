@@ -96,7 +96,7 @@ describe "Reservation class" do
       my_trip.projected_cost.must_be_instance_of Float
       my_trip.projected_cost.must_equal 300.00
     end
-
+    
     it "doesn't calculate trip cost for non-existant reservation" do
       proc {
         my_trip.projected_cost}.must_raise NameError

@@ -150,6 +150,13 @@ describe "FrontDesk class" do
       @concierge.find_reservation_by_id(4).must_equal a
       @concierge.find_reservation_by_id(5).must_equal b
     end
+
+    it "returns the reservation for the id specified" do
+      @concierge = Hotel::FrontDesk.new('support/test_reservations.csv', 'support/test_blocks.csv')
+      proc {
+        @concierge.find_reservation_by_id(4)
+      }.must_raise ArgumentError
+    end
   end
 
   describe "find_cost method" do
@@ -173,6 +180,12 @@ describe "FrontDesk class" do
     it "returns correct cost for a block room reservation" do
       @concierge.make_room_block(3, 160, '2018-5-5', '2018-5-7')
       @concierge.find_cost(4).must_equal 320.00
+    end
+
+    it "raises an error when asked to calculate trip cost for a non-existant reservation" do
+      proc {
+        @concierge.find_cost(4)
+      }.must_raise ArgumentError
     end
   end
 
